@@ -1,0 +1,61 @@
+
+casos de uso
+----------------------------------------------
+actualizar proceso de votacion -> diagrama
+consultar candidatos -> diagrama
+generar voto -> arreglar
+crud propuestas <-
+generar reporte de votacion <-
+-----------------------------------------------
+
+
+
+diagrama de clase
+-------------------------------------------------
+eliminar reporte
+-------------------------------------------------
+
+
+
+diagrama de paquetes
+-------------------------------------------------
+actualizar ajustando a los nuevos requerimientos
+-------------------------------------------------
+
+
+
+
+diagrama de despliegue
+-------------------------------------------------
+actualizar a los nuevos requerimientos
+-------------------------------------------------
+
+
+diagrama de secuencia
+--------------------------------------------------
+CRUD aspirante
+generar voto
+generar reporte de votacion
+-------------------------------------------------
+
+
+
+
+diagrama de colaboracion
+------------------------------------------------
+CRUD proceso de votacion
+iniciar sesion
+generar reporte de votacion
+generar voto
+-------------------------------------------------
+
+
+
+
+diagrama de actividades
+---------------------------------------------------
+CRUD proceso de votacion
+iniciar sesion
+generar reporte de votacion
+generar voto
+---------------------------------------------------
