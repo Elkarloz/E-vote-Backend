@@ -1,15 +1,5 @@
+-----------------------------------------------------
 
+		¡FINALIZADO PVTO!
 
-diagrama de colaboracion
-------------------------------------------------
-CRUD proceso de votacion
-iniciar sesion
-generar reporte de votacion
-generar voto
--------------------------------------------------
-
-
-diagrama de actividades
----------------------------------------------------
-CRUD proceso de votacion
----------------------------------------------------
+-----------------------------------------------------
