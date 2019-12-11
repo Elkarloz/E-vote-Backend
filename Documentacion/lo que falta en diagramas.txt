@@ -10,25 +10,7 @@ generar reporte de votacion <-
 
 
 
-diagrama de clase
--------------------------------------------------
-eliminar reporte
--------------------------------------------------
 
-
-
-diagrama de paquetes
--------------------------------------------------
-actualizar ajustando a los nuevos requerimientos
--------------------------------------------------
-
-
-
-
-diagrama de despliegue
--------------------------------------------------
-actualizar a los nuevos requerimientos
--------------------------------------------------
 
 
 diagrama de secuencia
