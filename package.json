@@ -1,0 +1,34 @@
+{
+  "name": "e-vote",
+  "version": "1.0.0",
+  "description": "Sistema de gestion para procesos electorales",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josedanilo1234/E-vote-Backend.git"
+  },
+  "keywords": [
+    "gestion",
+    "procesos",
+    "electorales"
+  ],
+  "author": "Jose Danilo Dussan,Carlos Mauricio Roa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josedanilo1234/E-vote-Backend/issues"
+  },
+  "homepage": "https://github.com/josedanilo1234/E-vote-Backend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "morgan": "^1.9.1",
+    "mysql": "^2.17.1",
+    "nodemon": "^2.0.2",
+    "xpress": "^2.4.6"
+  }
+}
