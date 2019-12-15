@@ -7,22 +7,28 @@ const router= express.Router();
 
 router.get('/', async function(req,res){
 
-    conexion.query('select * from tblpersona',(err,result)=>{
+ conexion.query('select * from tblpersona',(err,result)=>{
 res.json(result);
     })
 });
 
 router.post('/', async function(req,res){
-    console.log(req.body);
+
     const {PerDocumento,PerNombre,PerApellido,EstFicha,EstJornada,EstProgForm}=req.body;
     conexion.query('call Agrear_Estudiante_persona(?,?,?,?,?,?)',
     [PerDocumento,PerNombre,PerApellido,EstFicha,EstJornada,EstProgForm],
     (err,result)=>{
-        res.json({
-            message: 'Usuario',
-            Method: 'POST',
-            Status: 'Recibido'
-        });
+        if (err) {
+             res.status(500).json({
+                message: 'Ocurrio un error',
+              })
+          }else{
+            res.status(200).json({
+                message: 'Usuario agregado satisfactoriamente',
+                Method: 'POST',
+                Status: 'Recibido'
+              })
+          }
     })
 
 });
@@ -34,11 +40,17 @@ router.put('/:codigo', async function(req,res){
     conexion.query('Update tblpersona Set PerDocumento= ? ,PerNombre= ?,PerApellido= ? where PerCodigo= ?',
     [PerDocumento,PerNombre,PerApellido,req.params.codigo],
     (err,result)=>{
-         res.json({
-            message: 'Usuario',
+        if (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }else{
+           res.status(200).json({
+            message: ' Actualizado satisfactoriamente',
             Method: 'PUT',
             Status: 'Actualizado'
-        });
+             })
+         }
     })
 });
 
@@ -47,11 +59,17 @@ router.delete('/:codigo', async function(req,res){
     console.log(req.params.codigo);
     conexion.query('delete from tblpersona where PerCodigo= ?',[req.params.codigo],
     (err,result)=>{
-         res.json({
-            message: 'Usuario',
+        if (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }else{
+           res.status(200).json({
+            message: 'Usuario Elimiando Saisfactoriamente',
             Method: 'PUT',
             Status: 'Eliminado'
-        });
+             })
+         }
     })
 })
 
