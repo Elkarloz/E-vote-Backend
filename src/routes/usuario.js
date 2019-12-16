@@ -7,10 +7,31 @@ const router= express.Router();
 
 router.get('/', async function(req,res){
 
- conexion.query('select * from tblpersona',(err,result)=>{
-res.json(result);
+    conexion.query('select * from tblpersona',(err,result)=>{
+        if (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }else{
+           res.status(200).json(result);
+         }
+       })
+   });
+
+
+
+   router.get('/:codigo', async function(req,res){
+    conexion.query('select * from tblpersona where PerCodigo= ?',[req.params.codigo],
+    (err,result)=>{
+        if (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }else{
+           res.status(200).json(result);
+         }
     })
-});
+  });
 
 router.post('/', async function(req,res){
 
@@ -71,6 +92,5 @@ router.delete('/:codigo', async function(req,res){
              })
          }
     })
-})
-
+});
 module.exports=router;
