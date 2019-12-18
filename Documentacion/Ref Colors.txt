@@ -1,0 +1,5 @@
+# 007D00 -> firs colors 
+# 00C900 -> second colors 
+# 1a4821
+# C90065 
+# 7D003E
