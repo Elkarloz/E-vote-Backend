@@ -1,9 +1,9 @@
 const express =require ('express');
-
+const router= express.Router();
 const dbconnection = require('../models/dbconnection');
 const conexion= dbconnection();
 
-const router= express.Router();
+
 
 router.get('/', async function(req,res){
 
@@ -34,7 +34,7 @@ router.get('/', async function(req,res){
   });
 
 router.post('/', async function(req,res){
-
+  console.log(req.body)
     const {PerDocumento,PerNombre,PerApellido,EstFicha,EstJornada,EstProgForm}=req.body;
     conexion.query('call Agrear_Estudiante_persona(?,?,?,?,?,?)',
     [PerDocumento,PerNombre,PerApellido,EstFicha,EstJornada,EstProgForm],
@@ -57,7 +57,7 @@ router.post('/', async function(req,res){
 router.put('/:codigo', async function(req,res){
     console.log(req.params.codigo);
     const {PerDocumento,PerNombre,PerApellido}=req.body;
-    console.log(PerDocumento,PerNombre,PerApellido);
+    console.log(req.body);
     conexion.query('Update tblpersona Set PerDocumento= ? ,PerNombre= ?,PerApellido= ? where PerCodigo= ?',
     [PerDocumento,PerNombre,PerApellido,req.params.codigo],
     (err,result)=>{

@@ -5,18 +5,23 @@ import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
 const bodyParser = require('body-parser');
+const AuthToken =require('./src/middlewares/AuthToken')
 
 const app = express();
 
 //settings
 const port = process.env.PORT || 4000;
 
+
+
 //middlewares
+app.use(AuthToken);
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 
 

@@ -5,6 +5,6 @@ return mysql.createConnection({
     host:'localhost',
     user: 'root',
     password:'Jo.dussan',
-    database:'e-vote'
+    database:'prueba2'
 })
 }

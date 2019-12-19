@@ -43,6 +43,7 @@ CREATE TABLE `tblrol`  (
   PRIMARY KEY (`RolCodigo`) USING BTREE
 );
 
+
 DROP TABLE IF EXISTS `tblusuario`;
 CREATE TABLE `tblusuario`  (
   `UsuCodigo` bigint NOT NULL AUTO_INCREMENT,
@@ -50,11 +51,21 @@ CREATE TABLE `tblusuario`  (
   `UsuContraseña` varchar(60)  NOT NULL,
   `UsuEstado` enum('Activo','Inactivo')  NOT NULL,
   `UsuPerCodigo` bigint NOT NULL,
-  `UsuRolCodigo` bigint NOT NULL,
   PRIMARY KEY (`UsuCodigo`) USING BTREE,
-  CONSTRAINT `Usuario_fk_Rol` FOREIGN KEY (`UsuRolCodigo`) REFERENCES `tblrol` (`RolCodigo`),
   CONSTRAINT `Persona_fk_Usuario` FOREIGN KEY (`UsuPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`) 
   );
+
+DROP TABLE IF EXISTS `tblrolusuario`;
+CREATE TABLE `tblrolusuario`  (
+  `RolUsuCodigo` bigint NOT NULL AUTO_INCREMENT,
+  `RolUsuRolCodigo` bigint NOT NULL,
+  `RolUsuUsuCodigo` bigint NOT NULL,
+  `RolUsuRolEstado` enum('Activo','Inactivo')  NOT NULL,
+  PRIMARY KEY (`RolUsuCodigo`) USING BTREE
+  CONSTRAINT `Usuario_fk_Rol1` FOREIGN KEY (`RolUsuRolCodigo`) REFERENCES `tblrol` (`RolCodigo`),
+  CONSTRAINT `Usuario_fk_Rol2` FOREIGN KEY (`RolUsuUsuCodigo`) REFERENCES `tblusuario` (`UsuCodigo`)
+);
+
 
 
 
