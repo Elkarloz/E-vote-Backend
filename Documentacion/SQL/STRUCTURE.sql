@@ -61,7 +61,7 @@ CREATE TABLE `tblrolusuario`  (
   `RolUsuRolCodigo` bigint NOT NULL,
   `RolUsuUsuCodigo` bigint NOT NULL,
   `RolUsuRolEstado` enum('Activo','Inactivo')  NOT NULL,
-  PRIMARY KEY (`RolUsuCodigo`) USING BTREE
+  PRIMARY KEY (`RolUsuCodigo`) USING BTREE,
   CONSTRAINT `Usuario_fk_Rol1` FOREIGN KEY (`RolUsuRolCodigo`) REFERENCES `tblrol` (`RolCodigo`),
   CONSTRAINT `Usuario_fk_Rol2` FOREIGN KEY (`RolUsuUsuCodigo`) REFERENCES `tblusuario` (`UsuCodigo`)
 );

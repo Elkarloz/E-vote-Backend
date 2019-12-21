@@ -24,11 +24,12 @@ module.exports = function(req,res,next){
                 Messaje : error
             })
                 }else{ 
+                    console.log();
                     var RolToken=[];
-                    for (let index = 0; index < decoded.aux[0].RolToken.length; index++) {
-                        RolToken[index]=decoded.aux[0].RolToken[index].RolNombre;
+                    for (let index = 0; index < decoded.aux[0].roles.length; index++) {
+                        RolToken[index]=decoded.aux[0].roles[index].RolNombre;
                     }
-                   // console.log(RolToken)
+                    console.log(RolToken)
                     next(); 
                 }
             })
