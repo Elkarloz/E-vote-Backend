@@ -15,7 +15,7 @@ const port = process.env.PORT || 4000;
 
 
 //middlewares
-app.use(AuthToken);
+//app.use(AuthToken);
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
@@ -30,6 +30,11 @@ app.use('/',require('./src/routes/index'));
 app.use('/api/home',require('./src/routes/home'));
 app.use('/api/login',require('./src/routes/login'));
 app.use('/api/usuario',require('./src/routes/usuario'));
+app.use('/api/aspirante',require('./src/routes/aspirante'));
+app.use('/api/candidato',require('./src/routes/candidato'));
+app.use('/api/estudiante',require('./src/routes/estudiante'));
+app.use('/api/procesoVotacion',require('./src/routes/procesoVotacion'));
+app.use('/api/propuesta',require('./src/routes/propuesta'));
 
 // Middleware para Vue.js router modo history
 const history = require('connect-history-api-fallback');
