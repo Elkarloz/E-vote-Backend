@@ -7,7 +7,7 @@ CREATE TABLE `tbltipodocumento`  (
   `TipdocNombre` varchar(25)  NOT NULL,
   `TipdocEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`TipdocCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblsexo`;
 CREATE TABLE `tblsexo`  (
@@ -15,7 +15,7 @@ CREATE TABLE `tblsexo`  (
   `SexNombre` varchar(25)  NOT NULL,
   `SexEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`SexCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 
@@ -32,7 +32,7 @@ CREATE TABLE `tblpersona`  (
   PRIMARY KEY (`PerCodigo`) USING BTREE, 
   CONSTRAINT `Persona_fk_tipdoc` FOREIGN KEY (`PerTipdocCodigo`) REFERENCES `tbltipodocumento` (`TipdocCodigo`), 
   CONSTRAINT `Persona_fk_sexo` FOREIGN KEY (`PerSexCodigo`) REFERENCES `tblsexo` (`SexCodigo`) 
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblrol`;
@@ -41,7 +41,7 @@ CREATE TABLE `tblrol`  (
   `RolNombre` varchar(20) NOT NULL,
   `RolEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`RolCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblusuario`;
@@ -53,7 +53,7 @@ CREATE TABLE `tblusuario`  (
   `UsuPerCodigo` bigint NOT NULL,
   PRIMARY KEY (`UsuCodigo`) USING BTREE,
   CONSTRAINT `Persona_fk_Usuario` FOREIGN KEY (`UsuPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`) 
-  );
+  )ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblrolusuario`;
 CREATE TABLE `tblrolusuario`  (
@@ -64,7 +64,7 @@ CREATE TABLE `tblrolusuario`  (
   PRIMARY KEY (`RolUsuCodigo`) USING BTREE,
   CONSTRAINT `Usuario_fk_Rol1` FOREIGN KEY (`RolUsuRolCodigo`) REFERENCES `tblrol` (`RolCodigo`),
   CONSTRAINT `Usuario_fk_Rol2` FOREIGN KEY (`RolUsuUsuCodigo`) REFERENCES `tblusuario` (`UsuCodigo`)
-);
+)ENGINE = InnoDB;
 
 
 
@@ -75,7 +75,7 @@ CREATE TABLE `tbljornada`  (
   `JorNombre` varchar(25)  NOT NULL,
   `JorEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`JorCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblprogramaformacion`;
 CREATE TABLE `tblprogramaformacion`  (
@@ -83,7 +83,7 @@ CREATE TABLE `tblprogramaformacion`  (
   `ProforNombre` varchar(25)  NOT NULL,
   `ProforEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`ProforCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblhuella`;
@@ -96,7 +96,7 @@ CREATE TABLE `tblhuella`  (
   `HueCaracter5` longblob NOT NULL,
   `HueEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`HueCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblestudiante`;
@@ -113,7 +113,7 @@ CREATE TABLE `tblestudiante`  (
   CONSTRAINT `Persona_fk_Estudiante` FOREIGN KEY (`EstPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`),
   CONSTRAINT `Estudiante_fk_jornada` FOREIGN KEY (`EstJorCodigo`) REFERENCES `tbljornada` (`JorCodigo`),
   CONSTRAINT `Estudiante_fk_programaformacion` FOREIGN KEY (`EstProforCodigo`) REFERENCES `tblprogramaformacion` (`ProforCodigo`)
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblfuncion`;
@@ -122,7 +122,7 @@ CREATE TABLE `tblfuncion`  (
   `FunNombre` varchar(25)  NOT NULL,
   `FunEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`FunCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tbladministrador`;
@@ -134,7 +134,7 @@ CREATE TABLE `tbladministrador`  (
   PRIMARY KEY (`AdmCodigo`) USING BTREE,
   CONSTRAINT `Administrador_fk_funcion` FOREIGN KEY (`AdmFunCodigo`) REFERENCES `tblfuncion` (`FunCodigo`),
   CONSTRAINT `Persona_fk_Administrador` FOREIGN KEY (`AdmPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`)
-);
+)ENGINE = InnoDB;
 
 
  DROP TABLE IF EXISTS `tblprocesovotacion`;
@@ -153,7 +153,7 @@ CREATE TABLE `tblprocesovotacion`  (
   `ProVotAdmCodigo` bigint NOT NULL,
   PRIMARY KEY (`ProVotCodigo`) USING BTREE,
   CONSTRAINT `Proceso_fk_Administrador` FOREIGN KEY (`ProVotAdmCodigo`) REFERENCES `tbladministrador` (`AdmCodigo`) 
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblvotaciongeneral`;
@@ -166,7 +166,7 @@ CREATE TABLE `tblvotaciongeneral`  (
   `VotGenProVotCodigo` bigint NOT NULL,
   PRIMARY KEY (`VotGenCodigo`) USING BTREE,
   CONSTRAINT `votgen_fk_procvot` FOREIGN KEY (`VotGenProVotCodigo`) REFERENCES `tblprocesovotacion` (`ProVotCodigo`) 
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblcandidato`;
 CREATE TABLE `tblcandidato`  (
@@ -179,7 +179,7 @@ CREATE TABLE `tblcandidato`  (
   PRIMARY KEY (`CanCodigo`) USING BTREE,
   CONSTRAINT `Candidato_fk_ProcVot` FOREIGN KEY (`CanProVotCodigo`) REFERENCES `tblprocesovotacion` (`ProVotCodigo`),
   CONSTRAINT `Persona_fk_candidato` FOREIGN KEY (`CanPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`)
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblpropuesta`;
 CREATE TABLE `tblpropuesta`  (
@@ -190,7 +190,7 @@ CREATE TABLE `tblpropuesta`  (
   `ProCanCodigo` bigint NOT NULL,
   PRIMARY KEY (`ProCodigo`) USING BTREE,
   CONSTRAINT `Propuesta_fk_Candidato` FOREIGN KEY (`ProCanCodigo`) REFERENCES `tblcandidato` (`CanCodigo`)
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblaspirante`;
 CREATE TABLE `tblaspirante`  (
@@ -202,7 +202,7 @@ CREATE TABLE `tblaspirante`  (
   `AspPerCodigo` bigint NOT NULL,
   PRIMARY KEY (`AspCodigo`) USING BTREE,
   CONSTRAINT `Persona_fk_Aspirante` FOREIGN KEY (`AspPerCodigo`) REFERENCES `tblpersona` (`PerCodigo`) 
-);
+)ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS `tblinscripcion`;
@@ -215,7 +215,7 @@ CREATE TABLE `tblinscripcion`  (
   PRIMARY KEY (`InsCodigo`) USING BTREE,
   CONSTRAINT `Inscripcion_fk_Aspirante` FOREIGN KEY (`InsAspCodigo`) REFERENCES `tblaspirante` (`AspCodigo`),
   CONSTRAINT `Inscripcion_fk_Proceso` FOREIGN KEY (`InsProVotCodigo`) REFERENCES `tblprocesovotacion` (`ProVotCodigo`) 
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblvoto`;
 CREATE TABLE `tblvoto`  (
@@ -227,7 +227,7 @@ CREATE TABLE `tblvoto`  (
   PRIMARY KEY (`VotCodigo`) USING BTREE,
   CONSTRAINT `Cand_fk_Voto` FOREIGN KEY (`VotCanCodigo`) REFERENCES `tblcandidato` (`CanCodigo`) ,
   CONSTRAINT `Est_fk_Voto` FOREIGN KEY (`VotEstCodigo`) REFERENCES `tblestudiante` (`EstCodigo`)
-);
+)ENGINE = InnoDB;
 
 
 
@@ -239,7 +239,7 @@ CREATE TABLE `tblvistas`  (
   `VisTitulo` varchar(70)  NOT NULL,
   `VisEstado` enum('Activo','Inactivo')  NOT NULL,
   PRIMARY KEY (`VisCodigo`) USING BTREE
-);
+)ENGINE = InnoDB;
 
 
 
@@ -252,7 +252,7 @@ CREATE TABLE `tblsubvistas`  (
   `SubVisCodigo` bigint NULL DEFAULT NULL,
   PRIMARY KEY (`SubCodigo`) USING BTREE,  
   CONSTRAINT `vista_fk_subvista` FOREIGN KEY (`SubVisCodigo`) REFERENCES `tblvistas` (`VisCodigo`) 
-);
+)ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `tblvistasroles`;
 CREATE TABLE `tblvistasroles`  (
@@ -261,4 +261,4 @@ CREATE TABLE `tblvistasroles`  (
   `VisRolRolCodigo` bigint NOT NULL,
   CONSTRAINT `rol_fk_vistaroles` FOREIGN KEY (`VisRolRolCodigo`) REFERENCES `tblrol` (`RolCodigo`),
   CONSTRAINT `subvista_fk_vistaroles` FOREIGN KEY (`VisRolSubCodigo`) REFERENCES `tblsubvistas` (`SubCodigo`) 
-);
+)ENGINE = InnoDB;

@@ -51,7 +51,7 @@ router.post('/', async function (req, res) {
                             }
                         })
                 } else {
-                    res.status(404).json({
+                    res.status(500).json({
                         message: 'Usuario O contraseña incorrecta',
                         Method: 'POST',
                         Status: 'No autenticado'
