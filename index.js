@@ -35,6 +35,21 @@ app.use('/api/candidato',require('./src/routes/candidato'));
 app.use('/api/estudiante',require('./src/routes/estudiante'));
 app.use('/api/procesoVotacion',require('./src/routes/procesoVotacion'));
 app.use('/api/propuesta',require('./src/routes/propuesta'));
+app.use('/api/funcion',require('./src/routes/funcion'));
+app.use('/api/huella',require('./src/routes/huella'));
+app.use('/api/inscripcion',require('./src/routes/inscripcion'));
+app.use('/api/jornada', require('./src/routes/jornada'));
+app.use('/api/programaFormacion', require('./src/routes/programaFormacion'));
+app.use('/api/rol', require('./src/routes/rol'));
+app.use('/api/rolUsuario',require('./src/routes/rolUsuario'));
+app.use('/api/sexo',require('./src/routes/sexo'));
+app.use('/api/subVistas',require('./src/routes/subVistas'));
+app.use('/api/tipoDocumento',require('./src/routes/tipoDocumento'));
+app.use('/api/vistas',require('./src/routes/vistas'));
+app.use('/api/vistasRoles',require('./src/routes/vistasRoles'));
+app.use('/api/votacionGeneral',require('./src/routes/votacionGeneral'));
+app.use('/api/voto',require('./src/routes/voto'));
+
 
 // Middleware para Vue.js router modo history
 const history = require('connect-history-api-fallback');
