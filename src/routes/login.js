@@ -8,6 +8,8 @@ const secret='evote';
 router.post('/', async function (req, res) {
     var aux;
     const { UsuNombre, UsuContraseña } = req.body;
+    //console.log(UsuNombre);
+    //console.log(UsuContraseña);
     conexion.query('call logintemp(?,?)',
         [UsuNombre, UsuContraseña],
         (err, result) => {
@@ -40,7 +42,7 @@ router.post('/', async function (req, res) {
                                // b=b.replace(']','');
                                 //b=JSON.parse(a)
                                 
-                                jwt.sign(payload,secret,{ expiresIn: 300 },function(error,token){
+                                jwt.sign(payload,secret,{ expiresIn: 300},function(error,token){
                                     if(error){
                                        console.log(error)
                                     }else{
@@ -52,7 +54,7 @@ router.post('/', async function (req, res) {
                         })
                 } else {
                     res.status(500).json({
-                        message: 'Usuario O contraseña incorrecta',
+                        message: 'Las credenciales no coinciden con ningun usuario, por favor verifique las mismas',
                         Method: 'POST',
                         Status: 'No autenticado'
                     })

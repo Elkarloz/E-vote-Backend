@@ -6,38 +6,43 @@ module.exports = function(req,res,next){
    var metodo=req.method;
    var Rolpeticion= req.headers.rolseleccionado;
    var RolToken=[];
-   //var rutaAdmin=[],[];
-   //var rutaVotante=[],[];
-   //var rutaAspirante=[],[];
-   //var rutaCandidatp=[],[];
-   //console.log(Rolpeticion)
-
-
    if(ruta !='/api/login'){
        if(metodo !='OPTIONS'){
-           //console.log(req.headers)
-        if(req.headers.authorization){
+        if(req.headers.authorization!='Bearer null'){
             let token =req.headers.authorization.split(' ')[1]
             jwt.verify(token,secret,function(error,decoded){
                 if(error){
                     res.status(403).json({
-                Messaje : error
+                Error : error
             })
-                }else{ 
-                    console.log();
+                }else{
+                    //console.log(req.headers.rolseleccionado);
                     var RolToken=[];
+                    var existe =false;
                     for (let index = 0; index < decoded.aux[0].roles.length; index++) {
                         RolToken[index]=decoded.aux[0].roles[index].RolNombre;
+                        if(decoded.aux[0].roles[index].RolNombre===req.headers.rolseleccionado){
+                            existe=true;
+                        }
                     }
-                    console.log(RolToken)
-                    next(); 
+                    if(existe===true){
+                        next();
+                        existe=false;
+                          //console.log(RolToken)
+                    }else{
+                        res.status(403).json({
+                            Error :{
+                                message: 'No tiene permisos para realizar Esta accion'
+                            }
+                        })
+                    }
                 }
             })
-
-  
            }else{
             res.status(403).json({
-                Messaje :'No Posee Token de validacion'
+                Error :{
+                    message: 'No Posee Token de validacion'
+                }
             })
            }
        }else next();
