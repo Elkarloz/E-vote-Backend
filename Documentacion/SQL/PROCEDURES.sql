@@ -1,43 +1,46 @@
 -- ----------------------------
--- Procedure structure for Actualizar_Estudiante_persona
+-- Procedure structure for Actualizar_Estudiante_persona listo
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Actualizar_Estudiante_persona`;
 delimiter ;;
 CREATE PROCEDURE `Actualizar_Estudiante_persona`(in codigo int,
 in documento int,
+in tip_doc int,
 in nombre varchar(20),
 in apellido varchar(20),
-in Ficha varchar(20),
-in Jornada varchar(20),
-in programa varchar(20),
-in estado varchar(20))
+in sexo int,
+in Ficha int,
+in Jornada int,
+in programa int,
+in estado VARCHAR(20))
 BEGIN
-UPDATE tblpersona SET PerNombre=nombre,PerApellido=apellido,PerDocumento=documento WHERE PerCodigo=codigo;
-UPDATE tblestudiante SET EstFicha=ficha,EstJornada=jornada,EstProgForm=programa, EstEstado=estado WHERE EstPerCodigo=codigo;
+UPDATE tblpersona SET PerNombre=nombre,PerApellido=apellido,PerDocumento=documento,PerSexCodigo=sexo,PerTipdocCodigo=tip_doc WHERE PerCodigo=codigo;
+UPDATE tblestudiante SET EstFicha=ficha,EstJorCodigo=jornada,EstProforCodigo=programa, EstEstado=estado WHERE EstPerCodigo=codigo;
 End
 ;;
 delimiter ;
-
 -- ----------------------------
--- Procedure structure for Agrear_Estudiante_persona
+-- Procedure structure for Agrear_Estudiante_persona listo
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Agrear_Estudiante_persona`;
 delimiter ;;
 CREATE PROCEDURE `Agrear_Estudiante_persona`(in documento int,
+in tip_doc int,
 in nombre varchar(20),
 in apellido varchar(20),
-in Ficha varchar(20),
-in Jornada varchar(20),
-in programa varchar(20))
+in sexo int,
+in Ficha int,
+in Jornada int,
+in programa int)
 BEGIN
-declare llave1 int DEFAULT(SELECT COUNT(*)+1 FROM tblestudiante);
-declare llave2 int DEFAULT(SELECT COUNT(*)+1 FROM tblpersona);
-INSERT INTO tblpersona VALUES (llave2,documento,nombre,apellido,'M','Activo');
-INSERT INTO tblestudiante VALUES (llave1,Ficha,Jornada,programa,'Activo',llave2);
+
+declare llavePersona INT;
+INSERT INTO tblpersona VALUES (null,documento,nombre,apellido,'Activo',sexo,tip_doc);
+SET llavePersona =(SELECT PerCodigo FROM tblpersona WHERE PerDocumento=documento);
+INSERT INTO tblestudiante VALUES (null,Ficha,'Activo',llavePersona,jornada,programa,null);
 End
 ;;
 delimiter ;
-
 -- ----------------------------
 -- Procedure structure for Agregar_aspirante
 -- ----------------------------
@@ -63,7 +66,7 @@ END
 delimiter ;
 
 -- ----------------------------
--- Procedure structure for Agregar_Proceso
+-- Procedure structure for Agregar_Proceso listo
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Agregar_Proceso`;
 delimiter ;;
@@ -76,16 +79,23 @@ CREATE PROCEDURE `Agregar_Proceso`(`ProVotInicio` DATE,
 	`ProVotRegPropInicio`DATE,
 	`ProVotRegPropFin`DATE,
 	`ProVotFechaJornada`DATE,
-	`ProVotAdmCodigo` INT)
+	`PerCodigo` INT)
 BEGIN
-	DECLARE llave1 INT DEFAULT(SELECT count(*)+1 FROM tblprocesovotacion);
-	DECLARE llave2 INT DEFAULT(SELECT count(*)+1 FROM tblvotaciongeneral);
-	DECLARE llave3 INT DEFAULT(SELECT count(*)+1 FROM tblcandidato);
-	DECLARE fecha DATE DEFAULT(SELECT ProVotFechaJornada FROM tblprocesovotacion WHERE NOW() BETWEEN ProVotInicio AND 	ProVotFin);
-	INSERT INTO tblprocesovotacion VALUES(llave1,	`ProVotInicio`,`ProVotFin`,`ProVotRegEstInicio`,`ProVotRegEstFin`,	`ProVotValAspInicio`,`ProVotValAspFin`,`ProVotRegPropInicio`,`ProVotRegPropFin`,`ProVotFechaJornada`,'Activo',	`ProVotAdmCodigo`);
-	INSERT INTO tblvotaciongeneral VALUES (llave2,`ProVotFechaJornada`,0,0,'Activo');
-	INSERT INTO tblcandidato VALUES (llave3,0,NULL,'Activo',llave1,1);
-	END
+	DECLARE llave1 INT ;
+	DECLARE cod_admin INT;
+	DECLARE existe INT DEFAULT(SELECT COUNT(ProVotCodigo) FROM tblprocesovotacion WHERE (ProVotInicio  BETWEEN `ProVotInicio` AND `ProVotFin`) OR (	ProVotFin BETWEEN `ProVotInicio` AND 	`ProVotFin`));
+	
+	
+	IF(existe = 0)THEN
+		SET cod_admin=(SELECT tbladministrador.AdmCodigo FROM tbladministrador WHERE tbladministrador.AdmPerCodigo=`PerCodigo`);
+		INSERT INTO tblprocesovotacion VALUES(null,	`ProVotInicio`,`ProVotFin`,`ProVotRegEstInicio`,`ProVotRegEstFin`,	`ProVotValAspInicio`,`ProVotValAspFin`,`ProVotRegPropInicio`,`ProVotRegPropFin`,`ProVotFechaJornada`,'Activo',cod_admin);
+		SET llave1=(SELECT ProVotCodigo FROM tblprocesovotacion WHERE ProVotInicio=`ProVotInicio` and ProVotFin=`ProVotFin`);
+		INSERT INTO tblvotaciongeneral VALUES (null,`ProVotFechaJornada`,0,0,'Activo',llave1);
+		INSERT INTO tblcandidato VALUES (null,0,NULL,'Activo',llave1,1);
+	ELSE
+		SELECT 'Ya existe un proceso de votacion con esa fecha';
+	END IF;
+END
 ;;
 delimiter ;
 
@@ -114,7 +124,7 @@ END
 delimiter ;
 
 -- ----------------------------
--- Procedure structure for crear_usuario
+-- Procedure structure for crear_usuario listo
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `crear_usuario`;
 delimiter ;;
@@ -122,15 +132,20 @@ CREATE PROCEDURE `crear_usuario`(IN `Usuario` VARCHAR ( 50 ),
 	IN `Contraseña` VARCHAR ( 20 ),
 	IN `Documento` VARCHAR ( 20 ))
 BEGIN
-declare llave INT DEFAULT(SELECT count(*)+1 FROM tblusuario);
+
 declare existe INT DEFAULT(SELECT count(*) FROM tblpersona WHERE tblpersona.PerDocumento=`Documento`);
 declare existe2 INT DEFAULT(SELECT UsuCodigo FROM tblusuario WHERE UsuNombre=`Usuario`);
-#declare llaveU INT;
+declare llaveU INT;
 IF(existe2 is null)THEN
-IF (existe=1)THEN
-SELECT @llaveU:= PerCodigo FROM tblpersona WHERE PerDocumento=`Documento`;
-INSERT INTO tblusuario VALUES (llave,`Usuario`,MD5( `contraseña` ),'Activo',@llaveU,2);
-END IF;
+	IF (existe=1)THEN
+		SET llaveU= (SELECT PerCodigo FROM tblpersona WHERE PerDocumento=`Documento`);
+		SELECT 'Usuario creado satisfacotriamente' as Mensaje;
+		INSERT INTO tblusuario (UsuNombre,UsuContraseña,UsuEstado,UsuPerCodigo) VALUES (`Usuario`,MD5( `contraseña` ),'Activo',@llaveU);
+	ELSE
+		SELECT 'No existe Aprendiz con ese Documento' as Mensaje;
+	END IF;
+ELSE
+	SELECT 'Ya existe una persona con ese usuario' as Mensaje;
 END IF;
 END
 ;;
@@ -169,7 +184,7 @@ END
 delimiter ;
 
 -- ----------------------------
--- Procedure structure for logintemp
+-- Procedure structure for logintemp listo
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `logintemp`;
 delimiter ;;
@@ -177,11 +192,11 @@ CREATE PROCEDURE `logintemp`(IN `usuario` VARCHAR ( 320 ),
 	IN `contra` VARCHAR ( 300 ))
 BEGIN
 	SELECT 
-		p.PerCodigo,
+		p.`PerCodigo`,
 		p.`PerNombre`, 
 		p.`PerApellido`, 
-		u.`UsuNombre`,
-		r.`RolNombre`
+		u.`UsuNombre`
+		u.`UsuCodigo`
 		
 	FROM 
 		`tblpersona` AS p 
@@ -189,10 +204,6 @@ BEGIN
 		`tblusuario` AS u 
 	ON 
 		p.`PerCodigo` = u.`UsuPerCodigo` 
-	INNER JOIN
-		`tblrol` AS r 
-	ON
-		r.`RolCodigo`= u.`UsuRolCodigo`
 	WHERE
 	(
 		u.`UsuNombre` = `Usuario` 

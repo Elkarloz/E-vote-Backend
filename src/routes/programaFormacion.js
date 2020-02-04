@@ -5,7 +5,7 @@ const conexion= dbconnection();
 
 
 
-router.post('/agregar', async function(req, res){ 
+router.post('/', async function(req, res){ 
 const {ProforNombre,ProforEstado}=req.body;
    conexion.query('INSERT INTO tblprogramaformacion(ProforNombre,ProforEstado) VALUES(?,?)',
    [ProforNombre,ProforEstado],(err,result)=>{
@@ -22,7 +22,7 @@ const {ProforNombre,ProforEstado}=req.body;
 });
 
 
-router.get('/consultar', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
    conexion.query('SELECT * FROM tblprogramaformacion',(err,result)=>{
       try {
          res.json(result);
@@ -34,7 +34,7 @@ router.get('/consultar', async function(req,res){ //req = va tener la solicitud 
    })
 });
 
-router.get('/consultar/:codigo', async function(req,res){
+router.get('/:codigo', async function(req,res){
    conexion.query('SELECT * FROM tblprogramaformacion WHERE tblprogramaformacion.ProforCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
          res.json(result);
@@ -46,7 +46,7 @@ router.get('/consultar/:codigo', async function(req,res){
    })
 });
 
-router.put('/actualizar/:codigo', async function(req, res){
+router.put('/:codigo', async function(req, res){
    const {ProforNombre,ProforEstado}=req.body;
    conexion.query('UPDATE tblprogramaformacion SET ProforNombre = ?,ProforEstado = ? WHERE ProforCodigo = ?',
    [ProforNombre,ProforEstado,req.params.codigo],(err,result)=>{
@@ -64,7 +64,7 @@ router.put('/actualizar/:codigo', async function(req, res){
    })
 });
 
-router.delete('/eliminar/:codigo', async function(req, res){
+router.delete('/:codigo', async function(req, res){
 
    conexion.query('DELETE FROM tblprogramaformacion WHERE tblprogramaformacion.ProforCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
