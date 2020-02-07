@@ -22,7 +22,7 @@ const port = process.env.PORT || 4000;
 
 
 //middlewares
-app.use(AuthToken);
+//app.use(AuthToken);
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
