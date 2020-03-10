@@ -126,9 +126,7 @@ delimiter ;
 -- ----------------------------
 -- Procedure structure for crear_usuario listo
 -- ----------------------------
-DROP PROCEDURE IF EXISTS `crear_usuario`;
-delimiter ;;
-CREATE PROCEDURE `crear_usuario`(IN `Usuario` VARCHAR ( 50 ),
+CREATE DEFINER=`evote`@`%` PROCEDURE `crear_usuario`(IN `Usuario` VARCHAR ( 50 ),
 	IN `Contraseña` VARCHAR ( 20 ),
 	IN `Documento` VARCHAR ( 20 ))
 BEGIN
@@ -138,9 +136,9 @@ declare existe2 INT DEFAULT(SELECT UsuCodigo FROM tblusuario WHERE UsuNombre=`Us
 declare llaveU INT;
 IF(existe2 is null)THEN
 	IF (existe=1)THEN
-		SET llaveU= (SELECT PerCodigo FROM tblpersona WHERE PerDocumento=`Documento`);
+		SET llaveU= (SELECT EstCodigo FROM tblestudiante INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = PerCodigo WHERE PerDocumento='445');
 		SELECT 'Usuario creado satisfacotriamente' as Mensaje;
-		INSERT INTO tblusuario (UsuNombre,UsuContraseña,UsuEstado,UsuPerCodigo) VALUES (`Usuario`,MD5( `contraseña` ),'Activo',@llaveU);
+		INSERT INTO tblusuario (UsuNombre,UsuContraseña,UsuEstado,UsuPerCodigo) VALUES (`Usuario`,MD5( `contraseña` ),'Activo',llaveU);
 	ELSE
 		SELECT 'No existe Aprendiz con ese Documento' as Mensaje;
 	END IF;
@@ -148,8 +146,6 @@ ELSE
 	SELECT 'Ya existe una persona con ese usuario' as Mensaje;
 END IF;
 END
-;;
-delimiter ;
 
 -- ----------------------------
 -- Procedure structure for Generar_voto

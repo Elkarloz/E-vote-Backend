@@ -82,4 +82,21 @@ router.delete('/eliminar/:codigo', async function(req, res){
 
 });
 
+//Verificar si el votante esta activo
+router.post('/agregar', async function(req, res){ 
+   const {VotGenPeriodo,VotGenVotBlanco,VotGenTotal,VotGenEstado,VotGenProVotCodigo}=req.body;
+      conexion.query('INSERT INTO tblvotaciongeneral(VotGenPeriodo,VotGenVotBlanco,VotGenTotal,VotGenEstado,VotGenProVotCodigo) VALUES(?,?,?,?,?)',
+      [VotGenPeriodo,VotGenVotBlanco,VotGenTotal,VotGenEstado,VotGenProVotCodigo],(err,result)=>{
+         try {
+            res.json({
+               message: 'Agregado correctamente'
+            })
+         } catch (error) {
+            res.status(500).json({
+               message: 'Ocurrio un error'
+            })
+         }
+      })
+   });
+
 module.exports=router; // exportando las rutas

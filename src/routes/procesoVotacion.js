@@ -3,7 +3,7 @@ const router = express.Router();
 const dbconnection = require('../models/dbconnection'); // importando el modelo
 const conexion= dbconnection();
 
-router.get('/consultar', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
     conexion.query('SELECT * FROM tblprocesovotacion',(err,result)=>{
        try {
           res.json(result);
@@ -13,12 +13,13 @@ router.get('/consultar', async function(req,res){ //req = va tener la solicitud 
            })
        }
     })
- });
+});
 
-router.post('/agregar', async function(req, res){
-    const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo}=req.body;
-       conexion.query('INSERT INTO tblprocesovotacion(ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
-       [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo],(err,result)=>{
+
+router.post('/', async function(req, res){
+    const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,Nombre}=req.body;
+       conexion.query('CALL Agregar_Proceso (?,?,?,?,?,?,?,?,?,?)',
+       [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,Nombre],(err,result)=>{
           try {
              res.json({
                 message: 'Agregado correctamente'
@@ -29,9 +30,9 @@ router.post('/agregar', async function(req, res){
              })
           }
        })
-    });
+});
 
-router.put('/actualizar/:codigo', async function(req, res){
+router.put('/:codigo', async function(req, res){
     const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo}=req.body;
     conexion.query('UPDATE tblprocesovotacion SET ProVotInicio=?,ProVotFin=?,ProVotRegEstInicio=?,ProVotRegEstFin=?,ProVotValAspInicio=?,ProVotValAspFin=?,ProVotRegPropInicio=?,ProVotRegPropFin=?,ProVotFechaJornada=?,ProVotEstado=?,ProVotAdmCodigo=?',
     [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo,req.params.codigo],(err,result)=>{
@@ -47,9 +48,9 @@ router.put('/actualizar/:codigo', async function(req, res){
              })
            }
         })
-     });
+});
      
-router.delete('/eliminar/:codigo', async function(req, res){
+router.delete('/:codigo', async function(req, res){
     conexion.query('DELETE FROM tblprocesovotacion WHERE tblprocesovotacion.ProVotCodigo = ?',[req.params.codigo],(err,result)=>{
        try {
             res.json({
