@@ -100,7 +100,7 @@ doc
 
 .image('src/img/Logo.png', 550,780, {width: 50})
 doc.end(); //finaliza
-console.log('archivo generado'); */
+console.log('archivo generado');  */
 
 
 

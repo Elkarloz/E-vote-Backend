@@ -51,7 +51,7 @@ router.post('/verificar', async function(req,res){
                     message: 'Ocurrio un error',
                   })
               }else{    
-                res.status(200).json(result)
+                res.status(200).json(result[0])
               }
         })
     
