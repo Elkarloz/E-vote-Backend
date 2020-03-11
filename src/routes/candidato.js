@@ -1,5 +1,6 @@
 const express = require('express');
-const upload = require('../middlewares/storage')
+const upload = require('../middlewares/storage');
+import path from 'path';
 
 const router = express.Router();
 const dbconnection = require('../models/dbconnection'); // importando el modelo
@@ -7,10 +8,30 @@ const conexion= dbconnection();
 
 router.post('/subir', upload.single('imagen'), async function(req,res){
    try {
-      console.log(req.file);
-      res.json({
-      message: 'subio exitosamente'
-   })
+      console.log(req);
+      res.redirect('http://localhost:8080/dashboard');
+   } catch (error) {
+      res.status(500).json({
+         message: 'Ocurrio un error'
+      })
+   }
+});
+
+router.post('/subir:codigo', upload.single('imagen'), async function(req,res){
+   try {
+      console.log(req);
+      res.redirect('http://localhost:8080/dashboard');
+   } catch (error) {
+      res.status(500).json({
+         message: 'Ocurrio un error'
+      })
+   }
+});
+
+router.get('/ret_img', async function(req,res){
+   try {
+
+      res.sendFile(path.join(__dirname, '../../src\\img\\cover.jpg'));
    } catch (error) {
       res.status(500).json({
          message: 'Ocurrio un error'

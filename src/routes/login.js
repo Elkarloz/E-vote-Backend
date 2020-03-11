@@ -8,6 +8,7 @@ const secret='evote';
 router.post('/', async function (req, res) {
     var aux;
     const { UsuNombre, UsuContraseña } = req.body;
+    console.log(req.body)
     //console.log(UsuNombre);
     //console.log(UsuContraseña);
     conexion.query('call logintemp(?,?)',
