@@ -31,4 +31,18 @@ router.get('/:fecha', async function(req,res){
    })
 });
 
+router.get('/api/consulta/:codigo', async function(req,res){
+   console.log(req.params.codigo);
+   conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) Nombre, PerDocumento Documento, EstFicha Ficha,ProforNombre Prog_Form,JorNombre Jornada,EstEstado Estado FROM tblpersona INNER JOIN tblestudiante on(PerCodigo=EstPerCodigo) INNER JOIN tblprogramaformacion on(ProforCodigo=EstProforCodigo) INNER JOIN tbljornada on(JorCodigo=EstJorCodigo) WHERE PerDocumento=?",
+   [req.params.codigo],(err,result)=>{
+      try {
+         res.json(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+});
+
 module.exports=router;

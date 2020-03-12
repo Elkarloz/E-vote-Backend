@@ -135,6 +135,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use('/api/index',require('./src/routes/index'))
+app.use('/api/registro',require('./src/routes/registro'))
 app.use('/api/dashboard',require('./src/routes/dashboard'));
 app.use('/',require('./src/routes/index'));
 app.use('/api/home',require('./src/routes/home'));
