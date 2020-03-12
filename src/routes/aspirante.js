@@ -19,7 +19,7 @@ router.get('/:DocPer/:NomPer/:ApePer/:Ficha/:Jornada/:Programa', async function(
 });
 //consultar todos los aspirantes
 router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
-   conexion.query('SELECT AspCodigo,AspEstado,PerDocumento,PerNombre,PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo',(err,result)=>{
+   conexion.query('SELECT AspCodigo, AspEstado, PerDocumento, PerNombre, PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE AspEstado = "Activo"',(err,result)=>{
       try {
          res.json(result);
       } catch (err) {

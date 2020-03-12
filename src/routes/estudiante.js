@@ -40,7 +40,7 @@ router.post('/agregar', async function(req, res){
              })
           }
        })
-    });
+});
  
 
 router.put('/actualizar/:codigo', async function(req, res){

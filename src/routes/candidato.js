@@ -100,4 +100,23 @@ router.delete('/:codigo', async function(req, res){
         })
 });     
 
+//agregar propuestas
+router.post('/propuestas', async function(req, res){
+   const {codigo,ProNombre,ProDescripcion}=req.body;
+      console.log(req.body);
+      conexion.query('CALL agregar_propuestas(?,?,?)',
+      [codigo, ProNombre,ProDescripcion],(err,result)=>{
+         try {
+            res.json({
+               message: 'Agregado correctamente'
+            })
+         } catch (error) {
+            res.status(500).json({
+               message: 'Ocurrio un error'
+            })
+         }
+      })
+});
+
+
 module.exports=router; // exportando las rutas
