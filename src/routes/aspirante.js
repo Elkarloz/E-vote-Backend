@@ -114,4 +114,24 @@ router.post('/validar', async function(req,res){
    })
 });
 
+router.post('/Registrar', async function(req,res){
+   const {Codigo,}=req.body;
+   conexion.query('CALL Agregar_aspirante(?)',
+   [Codigo],(err,result)=>{
+
+   try {
+      res.status(200).json({
+         message: 'Validado correctamente',
+         Method: 'POST',
+         Status: 'Actualizado' 
+      })
+   } catch (error) {
+      res.status(500).json({
+         message: 'Ocurrio un error'
+      })
+   }
+   })
+});
+
+
 module.exports=router; // exportando las rutas

@@ -14,14 +14,15 @@ module.exports = ()=>{
 */
     return mysql.createConnection({
         
-        host:'localhost',
-        user: 'root',
-        password:'evote',
-        database:'evote'
+
+        host:'10.224.0.250',
+        user: 'evote',
+        password:'1234',
+        database:'Evote'
     /*  host:'localhost',
         user: 'root',
         password:'Jo.dussan',
-        database:'prueba2'*/
+        database:'prueba2'¨*/
    
         
 })
