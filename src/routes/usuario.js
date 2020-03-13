@@ -6,7 +6,7 @@ const conexion= dbconnection();
 
 
 router.get('/', async function(req,res){
-conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,EstEstado,SexNombre FROM tblestudiante INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo',(err,result)=>{
+conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,SexNombre,PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo',(err,result)=>{
   if (err) {
       res.status(500).json({
           message: 'Ocurrio un error',
