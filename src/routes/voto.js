@@ -83,12 +83,28 @@ router.delete('/eliminar/:codigo', async function(req, res){
 });
 
 router.get('/candidatos', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
-   conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) Nombre,CanNTarjeton Num_tar, CanEstado Estado FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo=CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) ORDER BY CanNTarjeton ASC",(err,result)=>{
+   conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) Nombre,CanCodigo Codigo, CanNTarjeton Numero, CanEstado Estado FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo=CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) ORDER BY CanNTarjeton ASC",(err,result)=>{
       try {
          res.json(result);
       } catch (err) {
          res.status(500).json({
             message: 'Ocurrio un error',
+          })
+      }
+   })
+});
+
+router.post('/Votar', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+   const {numero,documento,tipo}=req.body;
+   conexion.query('CALL Generar_voto(?,?,?)',
+   [numero,documento,tipo],(err,result)=>{
+      try {
+         res.json({
+            message: 'Voto Agregado correctamente'
+         })
+      } catch (err) {
+         res.status(500).json({
+            message: err,
           })
       }
    })
