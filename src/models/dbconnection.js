@@ -7,10 +7,10 @@ module.exports = ()=>{
         password:'Jo.dussan',
         database:'prueba2'
 
-        host:'198.71.225.53',
+        host:'10.224.0.250',
         user: 'evote',
-        password:'evote123',
-        database:'E-VOTE_pruebas'
+        password:'1234',
+        database:'Evote''
 */
     return mysql.createConnection({
         
@@ -22,7 +22,7 @@ module.exports = ()=>{
     /*  host:'localhost',
         user: 'root',
         password:'Jo.dussan',
-        database:'prueba2'¨*/
+        database:'prueba2'*/
    
         
 })
