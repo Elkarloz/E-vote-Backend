@@ -167,6 +167,7 @@ app.use('/api/votante',require('./src/routes/votante'));
 const history = require('connect-history-api-fallback');
 app.use(history());
 app.use(express.static(path.join(__dirname, '/src/public')));
+app.use(express.static(path.join(__dirname, '/src/img')));
 
 //listen
 app.listen(port, () => {
