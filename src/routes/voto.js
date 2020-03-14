@@ -83,7 +83,7 @@ router.delete('/eliminar/:codigo', async function(req, res){
 });
 
 router.get('/candidatos', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
-   conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) Nombre,CanCodigo Codigo, CanNTarjeton Numero, CanEstado Estado FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo=CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) ORDER BY CanNTarjeton ASC",(err,result)=>{
+   conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) Nombre,CanCodigo Codigo, CanNTarjeton Numero, CanEstado Estado, CanFotoRuta Ruta FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo=CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) ORDER BY CanNTarjeton ASC",(err,result)=>{
       try {
          res.json(result);
       } catch (err) {

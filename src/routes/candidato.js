@@ -21,7 +21,7 @@ router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
    
    var path=('../../'+req.file.path);
    
-  var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
+  var fotoruta= ('http://10.224.0.250:4000/api/candidato/retimg/'+req.params.codigo);
   console.log(req.params.codigo);
   console.log(fotoruta);
   path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
