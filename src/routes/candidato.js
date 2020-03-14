@@ -18,11 +18,19 @@ router.post('/subir', upload.single('imagen'), async function(req,res){
 });
 
 router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
+   
    var path=('../../'+req.file.path);
+   
   var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
-   conexion.query('UPDATE tblcandidato SET CanFoto = ?, CanFotoRuta = ? WHERE CanCodigo = ?',[path,fotoruta,fotoruta,req.params.codigo],(err,result)=>{
+  console.log(req.params.codigo);
+  console.log(fotoruta);
+  path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
+  path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
+  console.log(path);
+
+   conexion.query("UPDATE tblcandidato SET CanFoto = '"+path+"', CanFotoRuta = '"+fotoruta+"' WHERE CanCodigo = "+req.params.codigo+"",(err,result)=>{
       try {
-         res.redirect('http://localhost:8080/dashboard');
+         res.json(result);
       } catch (err) {
          res.status(500).json({
             message: 'Ocurrio un error',
@@ -32,7 +40,8 @@ router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
 });
 
 router.get('/retimg/:codigo', async function(req,res){
-   var prueba='../../src\\\\img\\\\cover.jpg';
+   
+   //var prueba='../../src\\\\img\\\\cover.jpg';
    conexion.query('SELECT CanFoto from tblcandidato WHERE CanCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
          var aux=result
@@ -49,7 +58,7 @@ router.get('/retimg/:codigo', async function(req,res){
 
 router.get('/id/:codigo', async function(req,res){
    var prueba='../../src\\\\img\\\\cover.jpg';
-   conexion.query('SELECT CanCodigo FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo = CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) WHERE PerCodigo=?',[req.params.codigo],(err,result)=>{
+   conexion.query('SELECT CanCodigo,CanFotoRuta FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo = CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) WHERE PerCodigo=?',[req.params.codigo],(err,result)=>{
       try {
          res.json(result[0]);
       } catch (err) {
