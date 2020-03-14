@@ -8,7 +8,7 @@ const conexion= dbconnection();
 
 router.post('/subir', upload.single('imagen'), async function(req,res){
    try {
-      console.log(req);
+      console.log(path);
       res.redirect('http://localhost:8080/dashboard');
    } catch (error) {
       res.status(500).json({
@@ -17,26 +17,48 @@ router.post('/subir', upload.single('imagen'), async function(req,res){
    }
 });
 
-router.post('/subir:codigo', upload.single('imagen'), async function(req,res){
-   try {
-      console.log(req);
-      res.redirect('http://localhost:8080/dashboard');
-   } catch (error) {
-      res.status(500).json({
-         message: 'Ocurrio un error'
-      })
-   }
+router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
+   var path=('../../'+req.file.path);
+  var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
+   conexion.query('UPDATE tblcandidato SET CanFoto = ?, CanFotoRuta = ? WHERE CanCodigo = ?',[path,fotoruta,fotoruta,req.params.codigo],(err,result)=>{
+      try {
+         res.redirect('http://localhost:8080/dashboard');
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
 });
 
-router.get('/ret_img', async function(req,res){
-   try {
+router.get('/retimg/:codigo', async function(req,res){
+   var prueba='../../src\\\\img\\\\cover.jpg';
+   conexion.query('SELECT CanFoto from tblcandidato WHERE CanCodigo = ?',[req.params.codigo],(err,result)=>{
+      try {
+         var aux=result
+         var foto=aux[0].CanFoto
+         res.sendFile(path.join(__dirname,foto));
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+   
+});
 
-      res.sendFile(path.join(__dirname, '../../src\\img\\cover.jpg'));
-   } catch (error) {
-      res.status(500).json({
-         message: 'Ocurrio un error'
-      })
-   }
+router.get('/id/:codigo', async function(req,res){
+   var prueba='../../src\\\\img\\\\cover.jpg';
+   conexion.query('SELECT CanCodigo FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo = CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) WHERE PerCodigo=?',[req.params.codigo],(err,result)=>{
+      try {
+         res.json(result[0]);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+   
 });
 
 
