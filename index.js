@@ -162,6 +162,8 @@ app.use('/api/votacionGeneral',require('./src/routes/votacionGeneral'));
 app.use('/api/voto',require('./src/routes/voto'));
 app.use('/api/votante',require('./src/routes/votante'));
 
+app.use('/api/reporte',require('./src/routes/reporte'));
+
 
 // Middleware para Vue.js router modo history
 const history = require('connect-history-api-fallback');
