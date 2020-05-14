@@ -19,9 +19,9 @@ router.post('/subir', upload.single('imagen'), async function(req,res){
 
 router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
    
-   var path=('../../'+req.file.path);
+ var path=('../../'+req.file.path);
    
-  var fotoruta= ('http://10.224.0.250:4000/api/candidato/retimg/'+req.params.codigo);
+  var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
   console.log(req.params.codigo);
   console.log(fotoruta);
   path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
@@ -57,7 +57,7 @@ router.get('/retimg/:codigo', async function(req,res){
 });
 
 router.get('/id/:codigo', async function(req,res){
-   var prueba='../../src\\\\img\\\\cover.jpg';
+   //var prueba='../../src\\\\img\\\\cover.jpg';
    conexion.query('SELECT CanCodigo,CanFotoRuta FROM tblcandidato INNER JOIN tblestudiante on (EstCodigo = CanEstCodigo) INNER JOIN tblpersona on (PerCodigo=EstPerCodigo) WHERE PerCodigo=?',[req.params.codigo],(err,result)=>{
       try {
          res.json(result[0]);
@@ -67,7 +67,6 @@ router.get('/id/:codigo', async function(req,res){
           })
       }
    })
-   
 });
 
 
