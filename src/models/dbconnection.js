@@ -13,17 +13,7 @@ module.exports = ()=>{
         database:'Evote''
 */
     return mysql.createConnection({
-<<<<<<< Updated upstream
         host:'localhost',
-=======
-        
-
-        host:'localhost',
-        user: 'root',
-        password:'Jo.dussan',
-        database:'evote'
-    /*  host:'localhost',
->>>>>>> Stashed changes
         user: 'root',
         password:'',
         database:'evote'       

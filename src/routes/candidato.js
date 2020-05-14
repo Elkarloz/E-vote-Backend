@@ -69,7 +69,18 @@ router.get('/id/:codigo', async function(req,res){
    })
 });
 
-
+router.get('/:DocPer/:NomPer/:ApePer/:Sex/:Estado', async function(req,res){
+   conexion.query('SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblsexo.SexNombre like '%"+req.params.Sex+"%' OR tblpersona.PerEstado like '%"+req.params.Estado+"%'",
+   [req.params.DocPer,req.params.NomPer,req.params.ApePer,req.params.Sex,req.params.Estado],(err,result)=>{
+      try {
+         res.json(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+         })
+      }
+   })
+   });
 
 router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
     conexion.query('SELECT CanCodigo,CanNTarjeton,PerNombre,PerApellido,CanEstado FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo',(err,result)=>{
@@ -83,16 +94,16 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
     })
 });
 
- router.get('/:codigo', async function(req,res){
-    conexion.query('SELECT CanCodigo,CanNTarjeton,PerNombre,PerApellido,CanEstado FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE CanCodigo = ?',[req.params.codigo],(err,result)=>{
-       try {
-          res.json(result);
-       } catch (err) {
-          res.status(500).json({
-             message: 'Ocurrio un error',
-           })
-       }
-    })
+router.get('/:codigo', async function(req,res){
+   conexion.query('SELECT CanCodigo,CanNTarjeton,PerNombre,PerApellido,CanEstado FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE CanCodigo = ?',[req.params.codigo],(err,result)=>{
+      try {
+         res.json(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+         })
+      }
+   })
 });
 
 router.put('/:codigo', async function(req, res){
