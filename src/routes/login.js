@@ -16,7 +16,7 @@ router.post('/', async function (req, res) {
         (err, result) => {
             if (err) {
                 res.status(500).json({
-                    message: 'Ocurrio un error',
+                    message: err,
                 })
             } else {
                 if (result[0].length > 0) {

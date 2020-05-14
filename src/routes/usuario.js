@@ -83,13 +83,14 @@ router.post('/', async function(req,res){
 router.put('/:codigo', async function(req,res){
 /*     console.log(req.params.codigo); */
     const {PerCodigo,PerDocumento,PerNombre,PerApellido,EstFicha,JorNombre,ProforNombre,SexNombre,TipdocNombre,EstEstado}=req.body;
-    /* console.log(req.body); */
+     console.log(req.body);
     conexion.query('CALL Actualizar_Estudiante_persona(?,?,?,?,?,?,?,?,?,?)',
     [PerCodigo,PerDocumento,PerNombre,PerApellido,EstFicha,JorNombre,ProforNombre,SexNombre,TipdocNombre,EstEstado],
     (err,result)=>{
         if (err) {
+          console.log(err);
             res.status(500).json({
-               message: 'Ocurrio un error',
+               message: err,
              })
          }else{
            res.status(200).json({
