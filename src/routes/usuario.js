@@ -32,7 +32,7 @@ router.get('/comboBox', async function(req,res){
 
 ///buscar x parametros
 router.get('/:DocPer/:NomPer/:ApePer/:Sex/:Estado', async function(req,res){
-  conexion.query('SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = ? OR tblpersona.PerNombre = ? OR tblpersona.PerApellido = ? OR tblsexo.SexNombre = ? OR tblpersona.PerEstado = ?',
+  conexion.query("SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblsexo.SexNombre like '%"+req.params.Sex+"%' OR tblpersona.PerEstado like '%"+req.params.Estado+"%'",
   [req.params.DocPer,req.params.NomPer,req.params.ApePer,req.params.Sex,req.params.Estado],(err,result)=>{
      try {
         res.json(result);
