@@ -132,6 +132,18 @@ router.post('/Registrar', async function(req,res){
    }
    })
 });
-
+router.get('/:DocPer/:NomPer/:ApePer', async function(req,res){
+   conexion.query("SELECT AspCodigo, AspEstado, PerDocumento, PerNombre, PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%'",
+   [req.params.DocPer],(err,result)=>{
+      try {
+         res.json(result);
+         // console.log(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+ });
 
 module.exports=router; // exportando las rutas
