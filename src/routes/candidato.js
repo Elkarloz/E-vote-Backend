@@ -69,9 +69,9 @@ router.get('/id/:codigo', async function(req,res){
    })
 });
 
-router.get('/:DocPer/:NomPer/:ApePer/:Sex/:Estado', async function(req,res){
-   conexion.query('SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblsexo.SexNombre like '%"+req.params.Sex+"%' OR tblpersona.PerEstado like '%"+req.params.Estado+"%'",
-   [req.params.DocPer,req.params.NomPer,req.params.ApePer,req.params.Sex,req.params.Estado],(err,result)=>{
+router.get('/:DocPer/:NomPer/:ApePer/:Estado', async function(req,res){
+   conexion.query("SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,CanEstado,CanCodigo,CanNTarjeton FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblcandidato.CanEstado = ?",
+   [req.params.Estado],(err,result)=>{
       try {
          res.json(result);
       } catch (err) {

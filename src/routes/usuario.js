@@ -32,8 +32,8 @@ router.get('/comboBox', async function(req,res){
 
 ///buscar x parametros
 router.get('/:DocPer/:NomPer/:ApePer/:Sex/:Estado', async function(req,res){
-  conexion.query("SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblsexo.SexNombre like '%"+req.params.Sex+"%' OR tblpersona.PerEstado like '%"+req.params.Estado+"%'",
-  [req.params.DocPer,req.params.NomPer,req.params.ApePer,req.params.Sex,req.params.Estado],(err,result)=>{
+  conexion.query("SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, SexNombre, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblsexo.SexNombre like '%"+req.params.Sex+"%' OR tblpersona.PerEstado = ?",
+  [req.params.Estado],(err,result)=>{
      try {
         res.json(result);
         // console.log(result);
@@ -46,17 +46,17 @@ router.get('/:DocPer/:NomPer/:ApePer/:Sex/:Estado', async function(req,res){
 });
 
 router.get('/:codigo', async function(req,res){
-conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,EstEstado,EstFicha,JorNombre,ProforNombre,SexNombre,TipdocNombre FROM tblestudiante INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo INNER JOIN tbltipodocumento ON tblpersona.PerTipdocCodigo = tbltipodocumento.TipdocCodigo WHERE PerCodigo = ?',[req.params.codigo],
-(err,result)=>{
-    if (err) {
-        res.status(500).json({
-            message: 'Ocurrio un error',
-          })
-      }else{
-        res.status(200).json(result);
-      }
-})
-});
+  conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,EstEstado,EstFicha,JorNombre,ProforNombre,SexNombre,TipdocNombre FROM tblestudiante INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo INNER JOIN tbltipodocumento ON tblpersona.PerTipdocCodigo = tbltipodocumento.TipdocCodigo WHERE PerCodigo = ?',
+  [req.params.codigo],(err,result)=>{
+      if (err) {
+          res.status(500).json({
+              message: 'Ocurrio un error',
+            })
+        }else{
+          res.status(200).json(result);
+        }
+  })
+  });
 
 router.post('/', async function(req,res){
   console.log(req.body)
