@@ -158,6 +158,39 @@ router.post('/propuestas', async function(req, res){
          }
       })
 });
-
+//consular propuestas
+router.get('/propuestas/:codigo', async function(req,res){
+   conexion.query('SELECT ProNombre,ProDescripcion FROM tblpropuesta INNER JOIN tblcandidato ON tblpropuesta.ProCanCodigo = tblcandidato.CanCodigo INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE PerCodigo = ?',[req.params.codigo],(err,result)=>{
+      try {
+         res.json(result);
+         console.log(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+         })
+      }
+   })
+});
+//actualizar propuestas
+router.put('/propuestas/:codigo', async function(req,res){
+       const {ProNombre,ProDescripcion,codigo}=req.body;
+        console.log(req.body);
+       conexion.query('CALL actualizar_propuestas(?,?,?)',
+       [ProNombre,ProDescripcion,codigo],
+       (err,result)=>{
+           if (err) {
+             console.log(err);
+               res.status(500).json({
+                  message: err,
+                })
+            }else{
+              res.status(200).json({
+               message: ' Actualizado satisfactoriamente',
+               Method: 'PUT',
+               Status: 'Actualizado'
+                })
+            }
+       })
+   });
 
 module.exports=router; // exportando las rutas

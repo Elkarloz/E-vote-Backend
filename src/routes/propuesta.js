@@ -3,7 +3,7 @@ const router = express.Router();
 const dbconnection = require('../models/dbconnection'); // importando el modelo
 const conexion= dbconnection();
 
-router.get('/consultar', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
     conexion.query('SELECT * FROM tblpropuesta',(err,result)=>{
        try {
           res.json(result);
@@ -15,7 +15,7 @@ router.get('/consultar', async function(req,res){ //req = va tener la solicitud 
     })
  });
 
- router.get('/consultar/:codigo', async function(req,res){
+ router.get('/', async function(req,res){
     conexion.query('SELECT * FROM tblpropuesta WHERE tblpropuesta.ProCodigo = ?',[req.params.codigo],(err,result)=>{
        try {
           res.json(result);
@@ -27,7 +27,7 @@ router.get('/consultar', async function(req,res){ //req = va tener la solicitud 
     })
  });
 
-router.post('/agregar', async function(req, res){
+router.post('/', async function(req, res){
     const {ProNombre,ProDescripcion,ProEstado,ProCanCodigo}=req.body;
        conexion.query('INSERT INTO tblpropuesta(ProNombre,ProDescripcion,ProEstado,ProCanCodigo) VALUES(?,?,?,?)',
        [ProNombre,ProDescripcion,ProEstado,ProCanCodigo],(err,result)=>{
@@ -43,7 +43,7 @@ router.post('/agregar', async function(req, res){
        })
     });
     
-router.put('/actualizar/:codigo', async function(req, res){
+router.put('/', async function(req, res){
     const {ProNombre,ProDescripcion,ProEstado,ProCanCodigo}=req.body;
     conexion.query('UPDATE tblpropuesta SET ProNombre = ?,ProDescripcion = ?,ProEstado = ?,ProCanCodigo = ?',
     [ProNombre,ProDescripcion,ProEstado,ProCanCodigo,req.params.codigo],(err,result)=>{
@@ -61,7 +61,7 @@ router.put('/actualizar/:codigo', async function(req, res){
         })
      });  
      
-router.delete('/eliminar/:codigo', async function(req, res){
+router.delete('/', async function(req, res){
     conexion.query('DELETE FROM tblpropuesta WHERE tblpropuesta.ProCodigo = ?',[req.params.codigo],(err,result)=>{
        try {
             res.json({
