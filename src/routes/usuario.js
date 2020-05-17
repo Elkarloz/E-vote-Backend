@@ -6,7 +6,7 @@ const conexion= dbconnection();
 
 
 router.get('/', async function(req,res){
-conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,SexNombre,PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo',(err,result)=>{
+conexion.query('SELECT PerCodigo, EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha,PerEstado, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo where EstFicha !=0 ORDER BY EstCodigo ASC',(err,result)=>{
   if (err) {
       res.status(500).json({
           message: 'Ocurrio un error',
@@ -19,29 +19,32 @@ conexion.query('SELECT PerCodigo,PerDocumento,PerNombre,PerApellido,SexNombre,Pe
 
 //Consulta para todos los comboBox
 router.get('/comboBox1', async function(req,res){
-  conexion.query('SELECT TipdocCodigo,TipdocNombre FROM tbltipodocumento',(err,result)=>{
-    if (err) {
-        res.status(500).json({
-            message: 'Ocurrio un error',
-          })
-      }else{
-        res.status(200).json(result);
-      }
-    })
-});
-router.get('/comboBox2', async function(req,res){
   conexion.query('SELECT ProforCodigo, ProforNombre FROM tblprogramaformacion',(err,result)=>{
     if (err) {
         res.status(500).json({
             message: 'Ocurrio un error',
           })
       }else{
-        res.status(200).json(result);
+        res.status(200).json(result); 
       }
     })
 });
-router.get('/comboBox3', async function(req,res){
+
+//Consulta para todos los comboBox
+router.get('/comboBox2', async function(req,res){
   conexion.query('SELECT JorCodigo, JorNombre FROM tbljornada',(err,result)=>{
+    if (err) {
+        res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }else{
+        res.status(200).json(result); 
+      }
+    })
+});
+
+router.get('/comboBox3', async function(req,res){
+  conexion.query('SELECT TipdocCodigo,TipdocNombre FROM tbltipodocumento',(err,result)=>{
     if (err) {
         res.status(500).json({
             message: 'Ocurrio un error',
@@ -53,9 +56,9 @@ router.get('/comboBox3', async function(req,res){
 });
 
 ///buscar x parametros
-router.get('/:DocPer/:NomPer/:ApePer/:Estado', async function(req,res){
-  conexion.query("SELECT PerCodigo, PerDocumento, PerNombre, PerApellido, PerEstado FROM tblpersona INNER JOIN tblsexo ON tblpersona.PerSexCodigo = tblsexo.SexCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblpersona.PerEstado = ?",
-  [req.params.Estado],(err,result)=>{
+router.get('/:DocPer/:NomPer/:ApePer/:Ficha/:Jornada/:Programa', async function(req,res){
+  conexion.query("SELECT EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblestudiante.EstFicha like '%"+req.params.Ficha+"%'  OR tbljornada.JorNombre like '%"+req.params.Jornada+"%' OR tblprogramaformacion.ProForNombre like '%"+req.params.Programa+"%' ",
+  [req.params.DocPer],(err,result)=>{
      try {
         res.json(result);
         // console.log(result);
@@ -82,13 +85,13 @@ router.get('/:codigo', async function(req,res){
 
 router.post('/', async function(req,res){
   console.log(req.body)
-    const {PerDocumento,PerNombre,PerApellido,EstFicha, JorCodigo, ProforNombre,TipdocNombre}=req.body;
-    conexion.query('call Agrear_Estudiante_persona (?,?,?,?,?,?,?)',
-    [PerDocumento,PerNombre,PerApellido,EstFicha, JorCodigo, ProforNombre,TipdocNombre],
+    const {PerDocumento,PerNombre,PerApellido,EstFicha, JorCodigo, ProforNombre,SexNombre,TipdocNombre}=req.body;
+    conexion.query('call Agrear_Estudiante_persona (?,?,?,?,?,?,?,?)',
+    [PerDocumento,PerNombre,PerApellido,EstFicha, JorCodigo, ProforNombre,SexNombre,TipdocNombre],
     (err,result)=>{
         if (err) {
              res.status(500).json({
-                message: 'Ocurrio un error',
+                message: err,
               })
           }else{
             res.status(200).json({
