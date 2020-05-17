@@ -5,8 +5,8 @@ const conexion= dbconnection();
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const doc = new PDFDocument;
-var aleatorio = Math.random();
-var f = new Date()  
+const download = require('download-pdf');
+var f = new Date();
 
 
 ///buscar x parametros
@@ -34,12 +34,37 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
       }
    })
 });
-
 //consultar por codigo aspirantes
 router.get('/:codigo', async function(req,res){
    conexion.query('SELECT AspCodigo,AspEstado,PerDocumento,PerNombre,PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
          res.json(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+});
+//Mostrar el PDF
+router.get('/PDF/:codigo', async function(req,res){
+   conexion.query('SELECT AspRutaDoc FROM tblaspirante WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
+      try {
+         var pdf = result[0].AspRutaDoc;
+         pdf=pdf.replace("/", String.fromCharCode(92));
+         pdf=pdf.replace("/", String.fromCharCode(92));
+         pdf=pdf.replace("/", String.fromCharCode(92));
+         var peth = (__dirname);
+         peth=peth.replace("routes", "")   
+         result=peth+pdf
+         res.json(result);
+         console.log(result);
+
+        /*  fs.readFile(__dirname + filePath , function (err,data){
+            res.contentType("application/pdf");
+            res.send(data);
+         }); */
+        
       } catch (err) {
          res.status(500).json({
             message: 'Ocurrio un error',
@@ -121,29 +146,28 @@ router.post('/validar', async function(req,res){
 
 router.post('/Registrar', async function(req,res){
    const {Documento,Nombre,Apellido,Ficha,Jornada,Formacion,Tipdoc,Correo1,Correo2,Nivel,Codigo}=req.body;
-   conexion.query('CALL Agregar_aspirante(?)',
-   [Codigo],(err,result)=>{
+   const Ruta= `/src/docs/Doc-${Apellido}-${Documento}.pdf`;
+   conexion.query('CALL Agregar_aspirante(?,?)',
+   [Codigo,Ruta],(err,result)=>{
 
    try {
       res.status(200).json({
-         message: 'Validado correctamente',
+         message: 'Registrado correctamente',
          Method: 'POST',
-         Status: 'Actualizado' 
+         Status: 'Agregado' 
       })
       // doc pdf
-
-      doc.pipe(fs.createWriteStream(`./src/docs/Doc-${aleatorio}.pdf`)); 
+      doc.pipe(fs.createWriteStream(`./src/docs/Doc-${Apellido}+${Documento}.pdf`)); 
       const titulo = 'FORMULARIO DE INSCRIPCION DE CANDIDATO A REPRESENTANTE DE APRENDICES 2020'
       var jornada = req.body.Jornada 
       var Nombre = (req.body.Nombre +(" ")+ req.body.Apellido)
       var TipoDoc = req.body.Tipdoc
-      var NDoc = req.body.Tipdoc
+      var NDoc = req.body.Documento
       var NivelFor = req.body.Nivel
       var ficha = req.body.Ficha
       var Profor = req.body.Formacion
       var correo = req.body.Correo1
-      var correo2 = req.body.Correo2 
-                              
+      var correo2 = req.body.Correo2                            
       doc
       .font('Times-Bold', 13)
       .image('src/img/Sena.png', 400, 50, {width: 100})
@@ -216,7 +240,8 @@ router.post('/Registrar', async function(req,res){
 
       .image('src/img/Logo.png', 500,750, {width: 100})
       doc.end(); //finaliza
-      console.log('archivo generado');    
+      console.log('archivo generado');   
+  
       
    } catch (error) {
       res.status(500).json({

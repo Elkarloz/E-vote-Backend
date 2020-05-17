@@ -72,11 +72,13 @@ app.use('/api/reporte',require('./src/routes/reporte'));
 
 
 
+
 // Middleware para Vue.js router modo history
 const history = require('connect-history-api-fallback');
 app.use(history());
 app.use(express.static(path.join(__dirname, '/src/public')));
 app.use(express.static(path.join(__dirname, '/src/img')));
+app.use(express.static(path.join(__dirname, '/src/docs')));
 
 //listen
 app.listen(port, () => {
