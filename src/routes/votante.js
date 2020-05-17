@@ -4,7 +4,7 @@ const dbconnection = require('../models/dbconnection'); // importando el modelo
 const conexion= dbconnection();
 
 router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
-   conexion.query('SELECT EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo where EstFicha !=0',(err,result)=>{
+   conexion.query('SELECT EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo where EstFicha !=0 ORDER BY EstCodigo ASC',(err,result)=>{
       try {
          res.json(result);
       } catch (err) {
@@ -41,6 +41,17 @@ router.get('/comboBox2', async function(req,res){
      })
 });
 
+router.get('/comboBox3', async function(req,res){
+   conexion.query('SELECT TipdocCodigo,TipdocNombre FROM tbltipodocumento',(err,result)=>{
+     if (err) {
+         res.status(500).json({
+             message: 'Ocurrio un error',
+           })
+       }else{
+         res.status(200).json(result);
+       }
+     })
+ });
 router.get('/:codigo', async function(req,res){
    conexion.query('SELECT EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE tblestudiante.EstCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
