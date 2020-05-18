@@ -19,14 +19,13 @@ router.post('/subir', upload.single('imagen'), async function(req,res){
 
 router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
    
- var path=('../../'+req.file.path);
-   
-  var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
-  console.log(req.params.codigo);
-  console.log(fotoruta);
-  path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
-  path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
-  console.log(path);
+   var path=('../../'+req.file.path);//nombre de la imagen (ruta de la imagen)
+   var fotoruta= ('http://localhost:4000/api/candidato/retimg/'+req.params.codigo);
+   console.log(req.params.codigo);
+   console.log(fotoruta);
+   path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
+   path=path.replace(String.fromCharCode(92),String.fromCharCode(47));
+   console.log(path);
 
    conexion.query("UPDATE tblcandidato SET CanFoto = '"+path+"', CanFotoRuta = '"+fotoruta+"' WHERE CanCodigo = "+req.params.codigo+"",(err,result)=>{
       try {

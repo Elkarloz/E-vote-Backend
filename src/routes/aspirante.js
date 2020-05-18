@@ -3,9 +3,9 @@ const router = express.Router();
 const dbconnection = require('../models/dbconnection'); // importando el modelo
 const conexion= dbconnection();
 const fs = require('fs');
+var path = require('path');
 const PDFDocument = require('pdfkit');
 const doc = new PDFDocument;
-const download = require('download-pdf');
 var f = new Date();
 
 
@@ -36,7 +36,7 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
 });
 //consultar por codigo aspirantes
 router.get('/:codigo', async function(req,res){
-   conexion.query('SELECT AspCodigo,AspEstado,PerDocumento,PerNombre,PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
+   conexion.query('SELECT AspPDFruta,AspCodigo,AspEstado,PerDocumento,PerNombre,PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
          res.json(result);
       } catch (err) {
@@ -48,23 +48,15 @@ router.get('/:codigo', async function(req,res){
 });
 //Mostrar el PDF
 router.get('/PDF/:codigo', async function(req,res){
-   conexion.query('SELECT AspRutaDoc FROM tblaspirante WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
+   conexion.query('SELECT AspRutaDoc,AspPDFruta FROM tblaspirante WHERE AspCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
-         var pdf = result[0].AspRutaDoc;
-         pdf=pdf.replace("/", String.fromCharCode(92));
-         pdf=pdf.replace("/", String.fromCharCode(92));
-         pdf=pdf.replace("/", String.fromCharCode(92));
-         var peth = (__dirname);
-         peth=peth.replace("routes", "")   
-         result=peth+pdf
-         res.json(result);
-         console.log(result);
-
-        /*  fs.readFile(__dirname + filePath , function (err,data){
-            res.contentType("application/pdf");
-            res.send(data);
-         }); */
-        
+         var pdf = result[0].AspRutaDoc
+         pdf=pdf.replace("/",String.fromCharCode(92));
+         pdf=pdf.replace("/",String.fromCharCode(92));
+         pdf=pdf.replace("/",String.fromCharCode(92));
+         pdf=pdf.replace("/",String.fromCharCode(92));
+         console.log(path.join(__dirname,pdf));
+         res.sendFile(path.join(__dirname,pdf));
       } catch (err) {
          res.status(500).json({
             message: 'Ocurrio un error',
@@ -72,83 +64,14 @@ router.get('/PDF/:codigo', async function(req,res){
       }
    })
 });
-// agregar aspirante
-router.put('/:codigo', async function(req, res){
-   const {AspDoc1,AspDoc2,AspEstado,AspFormPost,AspPerCodigo}=req.body;
-   conexion.query('UPDATE tblaspirante SET AspDoc1 = ?,AspDoc2 = ?,AspEstado = ?,AspFormPost = ?,AspPerCodigo = ? WHERE AspCodigo = ?',
-   [AspDoc1,AspDoc2,AspEstado,AspFormPost,AspPerCodigo,req.params.codigo],(err,result)=>{
-      try {
-         res.json({
-            message: ' Actualizado satisfactoriamente',
-            Method: 'PUT',
-            Status: 'Actualizado'
-             });
-      } catch (err) {
-         res.status(500).json({
-            message: 'Ocurrio un error',
-          })
-      }
-   })
-});
-// eliminar aspirante
-router.delete('/:codigo', async function(req, res){
 
-   conexion.query('DELETE FROM tblaspirante WHERE tblaspirante.AspCodigo = ?',[req.params.codigo],(err,result)=>{
-      try {
-         res.json({
-            message: 'Eliminado satisfactoriamente',
-            Method: 'PUT',
-            Status: 'Actualizado'
-             });
-      } catch (error) {
-         res.status(500).json({
-            message: 'Ocurrio un error',
-          })
-      }
-   })
-
-});
-//agregar nuevo aspirante
-router.post('/', async function(req, res){ 
-   const {AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo}=req.body;
-      conexion.query('INSERT INTO tblaspirante(AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo) VALUES(?,?,?,?,?)',
-      [AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo],(err,result)=>{
-         try {
-            res.json({
-               message: 'Agregado correctamente'
-            })
-         } catch (error) {
-            res.status(500).json({
-               message: 'Ocurrio un error'
-            })
-         }
-      })
-});
-// validar aspirante a candidato
-router.post('/validar', async function(req,res){
-   const {CanNTarjeton,PerDocumento}=req.body;
-   conexion.query('CALL Validar_candidato(?,?)',
-   [CanNTarjeton,PerDocumento],(err,result)=>{
-
-   try {
-      res.status(200).json({
-         message: 'Validado correctamente',
-         Method: 'POST',
-         Status: 'Actualizado' 
-      })
-   } catch (error) {
-      res.status(500).json({
-         message: 'Ocurrio un error'
-      })
-   }
-   })
-});
-
+//Agregar PDF Y Aspitante
 router.post('/Registrar', async function(req,res){
    const {Documento,Nombre,Apellido,Ficha,Jornada,Formacion,Tipdoc,Correo1,Correo2,Nivel,Codigo}=req.body;
-   const Ruta= `/src/docs/Doc-${Apellido}-${Documento}.pdf`;
-   conexion.query('CALL Agregar_aspirante(?,?)',
-   [Codigo,Ruta],(err,result)=>{
+   const Ruta= `/../../src/docs/Doc-${Apellido}-${Documento}.pdf`;
+   const PDFRuta = ("http://localhost:4000/api/aspirante/PDF/")
+   conexion.query('CALL Agregar_aspirante(?,?,?)',
+   [Codigo,Ruta,PDFRuta],(err,result)=>{
 
    try {
       res.status(200).json({
@@ -157,7 +80,7 @@ router.post('/Registrar', async function(req,res){
          Status: 'Agregado' 
       })
       // doc pdf
-      doc.pipe(fs.createWriteStream(`./src/docs/Doc-${Apellido}+${Documento}.pdf`)); 
+      doc.pipe(fs.createWriteStream(`./src/docs/Doc-${Apellido}-${Documento}.pdf`)); 
       const titulo = 'FORMULARIO DE INSCRIPCION DE CANDIDATO A REPRESENTANTE DE APRENDICES 2020'
       var jornada = req.body.Jornada 
       var Nombre = (req.body.Nombre +(" ")+ req.body.Apellido)
@@ -250,6 +173,79 @@ router.post('/Registrar', async function(req,res){
    }
    })
 });
+
+// agregar aspirante
+router.put('/:codigo', async function(req, res){
+   const {AspDoc1,AspDoc2,AspEstado,AspFormPost,AspPerCodigo}=req.body;
+   conexion.query('UPDATE tblaspirante SET AspDoc1 = ?,AspDoc2 = ?,AspEstado = ?,AspFormPost = ?,AspPerCodigo = ? WHERE AspCodigo = ?',
+   [AspDoc1,AspDoc2,AspEstado,AspFormPost,AspPerCodigo,req.params.codigo],(err,result)=>{
+      try {
+         res.json({
+            message: ' Actualizado satisfactoriamente',
+            Method: 'PUT',
+            Status: 'Actualizado'
+             });
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+});
+// eliminar aspirante
+router.delete('/:codigo', async function(req, res){
+
+   conexion.query('DELETE FROM tblaspirante WHERE tblaspirante.AspCodigo = ?',[req.params.codigo],(err,result)=>{
+      try {
+         res.json({
+            message: 'Eliminado satisfactoriamente',
+            Method: 'PUT',
+            Status: 'Actualizado'
+             });
+      } catch (error) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+
+});
+//agregar nuevo aspirante
+router.post('/', async function(req, res){ 
+   const {AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo}=req.body;
+      conexion.query('INSERT INTO tblaspirante(AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo) VALUES(?,?,?,?,?)',
+      [AspFormPost,AspDoc1,AspDoc2,AspEstado,AspPerCodigo],(err,result)=>{
+         try {
+            res.json({
+               message: 'Agregado correctamente'
+            })
+         } catch (error) {
+            res.status(500).json({
+               message: 'Ocurrio un error'
+            })
+         }
+      })
+});
+// validar aspirante a candidato
+router.post('/validar', async function(req,res){
+   const {CanNTarjeton,PerDocumento}=req.body;
+   conexion.query('CALL Validar_candidato(?,?)',
+   [CanNTarjeton,PerDocumento],(err,result)=>{
+
+   try {
+      res.status(200).json({
+         message: 'Validado correctamente',
+         Method: 'POST',
+         Status: 'Actualizado' 
+      })
+   } catch (error) {
+      res.status(500).json({
+         message: 'Ocurrio un error'
+      })
+   }
+   })
+});
+
 router.get('/:DocPer/:NomPer/:ApePer', async function(req,res){
    conexion.query("SELECT AspCodigo, AspEstado, PerDocumento, PerNombre, PerApellido FROM tblaspirante INNER JOIN tblestudiante ON tblaspirante.AspEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%'",
    [req.params.DocPer],(err,result)=>{
