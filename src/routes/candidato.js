@@ -29,7 +29,7 @@ router.post('/subir/:codigo', upload.single('imagen'), async function(req,res){
 
    conexion.query("UPDATE tblcandidato SET CanFoto = '"+path+"', CanFotoRuta = '"+fotoruta+"' WHERE CanCodigo = "+req.params.codigo+"",(err,result)=>{
       try {
-         res.json(result);
+         res.redirect('http://localhost:8080/dashboard/candidatos/actualizar')
       } catch (err) {
          res.status(500).json({
             message: 'Ocurrio un error',
@@ -45,6 +45,7 @@ router.get('/retimg/:codigo', async function(req,res){
       try {
          var aux=result
          var foto=aux[0].CanFoto
+         console.log('ruta mk carlos:',path.join(__dirname,foto));
          res.sendFile(path.join(__dirname,foto));
       } catch (err) {
          res.status(500).json({
