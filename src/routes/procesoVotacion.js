@@ -18,14 +18,16 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
 
 router.post('/', async function(req, res){
     const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,codigo}=req.body;
-       console.log(req.body);
+       //console.log(req.body);
        conexion.query('CALL Agregar_Proceso (?,?,?,?,?,?,?,?,?,?)',
        [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,codigo],(err,result)=>{
-          try {
+         
+         try {
+            //console.log(result[0]) 
              res.json({
-                message: 'Agregado correctamente'
+                message: result[0][0].Mensaje
              })
-          } catch (error) {
+          } catch (err) {
              res.status(500).json({
                 message: 'Ocurrio un error'
              })
