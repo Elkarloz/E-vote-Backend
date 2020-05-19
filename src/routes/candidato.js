@@ -140,7 +140,6 @@ router.delete('/:codigo', async function(req, res){
            }
         })
 });     
-
 //agregar propuestas
 router.post('/propuestas', async function(req, res){
    const {codigo,ProNombre,ProDescripcion}=req.body;
@@ -158,7 +157,7 @@ router.post('/propuestas', async function(req, res){
          }
       })
 });
-//consular propuestas
+//consular propuestas por codigo
 router.get('/propuestas/:codigo', async function(req,res){
    conexion.query('SELECT ProNombre,ProDescripcion FROM tblpropuesta INNER JOIN tblcandidato ON tblpropuesta.ProCanCodigo = tblcandidato.CanCodigo INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo WHERE PerCodigo = ?',[req.params.codigo],(err,result)=>{
       try {
@@ -171,6 +170,7 @@ router.get('/propuestas/:codigo', async function(req,res){
       }
    })
 });
+
 //actualizar propuestas
 router.put('/propuestas/:codigo', async function(req,res){
        const {ProNombre,ProDescripcion,codigo}=req.body;
@@ -191,6 +191,6 @@ router.put('/propuestas/:codigo', async function(req,res){
                 })
             }
        })
-   });
+});
 
 module.exports=router; // exportando las rutas
