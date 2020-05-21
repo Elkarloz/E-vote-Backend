@@ -57,7 +57,7 @@ router.get('/comboBox3', async function(req,res){
 
 ///buscar x parametros
 router.get('/:DocPer/:NomPer/:ApePer/:Ficha/:Jornada/:Programa', async function(req,res){
-  conexion.query("SELECT EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblestudiante.EstFicha like '%"+req.params.Ficha+"%'  OR tbljornada.JorNombre like '%"+req.params.Jornada+"%' OR tblprogramaformacion.ProForNombre like '%"+req.params.Programa+"%' ",
+  conexion.query("SELECT PerCodigo, EstCodigo, PerDocumento, PerNombre, PerApellido, EstFicha,PerEstado, JorNombre, ProforNombre  FROM tblestudiante INNER JOIN tbljornada ON tblestudiante.EstJorCodigo = tbljornada.JorCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo INNER JOIN tblprogramaformacion ON tblestudiante.EstProforCodigo = tblprogramaformacion.ProforCodigo WHERE tblpersona.PerDocumento = '"+req.params.DocPer+"' OR tblpersona.PerNombre like '%"+req.params.NomPer+"%' OR tblpersona.PerApellido like '%"+req.params.ApePer+"%' OR tblestudiante.EstFicha like '%"+req.params.Ficha+"%'  OR tbljornada.JorNombre like '%"+req.params.Jornada+"%' OR tblprogramaformacion.ProForNombre like '%"+req.params.Programa+"%' ",
   [req.params.DocPer],(err,result)=>{
      try {
         res.json(result);

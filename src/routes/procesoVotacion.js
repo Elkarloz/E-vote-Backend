@@ -15,6 +15,18 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
     })
 });
 
+router.get('/:codigo', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+   conexion.query("SELECT * FROM tblprocesovotacion WHERE ProVotCodigo= "+req.params.codigo+";",(err,result)=>{
+      try {
+         res.json(result);
+      } catch (err) {
+         res.status(500).json({
+            message: 'Ocurrio un error',
+          })
+      }
+   })
+});
+
 
 router.post('/', async function(req, res){
     const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,codigo}=req.body;
@@ -36,9 +48,9 @@ router.post('/', async function(req, res){
 });
 
 router.put('/:codigo', async function(req, res){
-    const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo}=req.body;
-    conexion.query('UPDATE tblprocesovotacion SET ProVotInicio=?,ProVotFin=?,ProVotRegEstInicio=?,ProVotRegEstFin=?,ProVotValAspInicio=?,ProVotValAspFin=?,ProVotRegPropInicio=?,ProVotRegPropFin=?,ProVotFechaJornada=?,ProVotEstado=?,ProVotAdmCodigo=?',
-    [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,ProVotAdmCodigo,req.params.codigo],(err,result)=>{
+    const {ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado}=req.body;
+    conexion.query('UPDATE tblprocesovotacion SET ProVotInicio=?,ProVotFin=?,ProVotRegEstInicio=?,ProVotRegEstFin=?,ProVotValAspInicio=?,ProVotValAspFin=?,ProVotRegPropInicio=?,ProVotRegPropFin=?,ProVotFechaJornada=?,ProVotEstado=? WHERE ProVotCodigo=?',
+    [ProVotInicio,ProVotFin,ProVotRegEstInicio,ProVotRegEstFin,ProVotValAspInicio,ProVotValAspFin,ProVotRegPropInicio,ProVotRegPropFin,ProVotFechaJornada,ProVotEstado,req.params.codigo],(err,result)=>{
        try {
           res.json({
                 message: ' Actualizado satisfactoriamente',
