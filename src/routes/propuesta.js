@@ -7,6 +7,7 @@ router.get('/', async function(req,res){ //req = va tener la solicitud  res = va
     conexion.query("SELECT CONCAT(PerNombre,' ',PerApellido) nombre, ProNombre,ProDescripcion,CanNTarjeton,CanFotoRuta FROM tblpropuesta INNER JOIN tblcandidato ON tblpropuesta.ProCanCodigo = tblcandidato.CanCodigo INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo",(err,result)=>{
        try {
           res.json(result);
+          console.log(result);
        } catch (err) {
           res.status(500).json({
              message: 'Ocurrio un error',

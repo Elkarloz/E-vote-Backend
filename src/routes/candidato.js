@@ -124,9 +124,9 @@ router.put('/:codigo', async function(req, res){
            }
         })
 });
-
-router.delete('/:codigo', async function(req, res){
-    conexion.query('DELETE FROM tblcandidato WHERE CanCodigo = ?',[req.params.codigo],(err,result)=>{
+/* Eliminar candidato */
+router.post('/eliminar/:codigo', async function(req, res){
+    conexion.query('CALL Eliminar_Candidato(?)',[req.params.codigo],(err,result)=>{
        try {
             res.json({
              message: 'Eliminado satisfactoriamente',

@@ -74,11 +74,6 @@ router.post('/Registrar', async function(req,res){
    [Codigo,Ruta,PDFRuta],(err,result)=>{
 
    try {
-      res.status(200).json({
-         message: 'Registrado correctamente',
-         Method: 'POST',
-         Status: 'Agregado' 
-      })
       // doc pdf
       doc.pipe(fs.createWriteStream(`./src/docs/Doc-${Apellido}-${Documento}.pdf`)); 
       const titulo = 'FORMULARIO DE INSCRIPCION DE CANDIDATO A REPRESENTANTE DE APRENDICES 2020'
