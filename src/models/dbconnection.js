@@ -15,7 +15,7 @@ module.exports = ()=>{
     return mysql.createConnection({
         host:'localhost',
         user: 'root',
-        password:'',
+        password:'Jo.dussan',
         database:'evote'       
 })
 }

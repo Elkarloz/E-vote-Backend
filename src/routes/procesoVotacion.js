@@ -79,5 +79,42 @@ router.delete('/:codigo', async function(req, res){
               })
            }
         })
-     });      
+     });
+     
+     router.get('/ano/:fecha', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+      conexion.query("SELECT * FROM tblprocesovotacion WHERE "+req.params.fecha+" BETWEEN YEAR(ProVotInicio) AND YEAR(ProVotFin);",(err,result)=>{
+         try {
+            res.json(result);
+         } catch (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }
+      })
+   });
+   router.get('/Inicio_fin/:fecha1/:fecha2', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+      conexion.query("SELECT * FROM tblprocesovotacion WHERE ProVotInicio BETWEEN '"+req.params.fecha1+"' AND '"+req.params.fecha2+"';",(err,result)=>{
+         try {
+            res.json(result);
+         } catch (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }
+      })
+   });
+
+   router.get('/jornada/:fecha1', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
+      conexion.query("SELECT * FROM tblprocesovotacion WHERE ProVotFechaJornada = '"+req.params.fecha1+"';",(err,result)=>{
+         try {
+            res.json(result);
+         } catch (err) {
+            res.status(500).json({
+               message: 'Ocurrio un error',
+             })
+         }
+      })
+   });
+   
+     
 module.exports=router; // exportando las rutas
