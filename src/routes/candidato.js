@@ -143,7 +143,6 @@ router.post('/eliminar/:codigo', async function(req, res){
 //agregar propuestas
 router.post('/propuestas', async function(req, res){
    const {codigo,ProNombre,ProDescripcion}=req.body;
-      console.log(req.body);
       conexion.query('CALL agregar_propuestas(?,?,?)',
       [codigo, ProNombre,ProDescripcion],(err,result)=>{
          try {
@@ -173,8 +172,8 @@ router.get('/propuestas/:codigo', async function(req,res){
 
 //actualizar propuestas
 router.put('/propuestas/:codigo', async function(req,res){
-       const {ProNombre,ProDescripcion,codigo}=req.body;
-        console.log(req.body);
+    const {ProNombre,ProDescripcion,codigo}=req.body;
+      console.log(req.body);
        conexion.query('CALL actualizar_propuestas(?,?,?)',
        [ProNombre,ProDescripcion,codigo],
        (err,result)=>{
