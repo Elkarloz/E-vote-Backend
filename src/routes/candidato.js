@@ -83,7 +83,7 @@ router.get('/:DocPer/:NomPer/:ApePer/:Estado', async function(req,res){
    });
 
 router.get('/', async function(req,res){ //req = va tener la solicitud  res = va tener la respuesta
-    conexion.query('SELECT CanCodigo,CanNTarjeton,PerNombre,PerApellido,CanEstado FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo',(err,result)=>{
+    conexion.query('SELECT CanCodigo,CanNTarjeton,PerNombre,PerApellido,CanEstado FROM tblcandidato INNER JOIN tblestudiante ON tblcandidato.CanEstCodigo = tblestudiante.EstCodigo INNER JOIN tblpersona ON tblestudiante.EstPerCodigo = tblpersona.PerCodigo where EstFicha !=0',(err,result)=>{
        try {
           res.json(result);
        } catch (err) {
